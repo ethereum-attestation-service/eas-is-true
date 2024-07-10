@@ -128,11 +128,6 @@ export const menuLinks: HeaderMenuLink[] = [
     label: "Recent",
     href: "/recent",
   },
-  // {
-  //   label: "Debug Contracts",
-  //   href: "/debug",
-  //   icon: <BugAntIcon className="h-4 w-4" />,
-  // },
 ];
 
 export const HeaderMenuLinks = () => {
@@ -192,7 +187,7 @@ export const Header = () => {
             <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
           </LogoContainer>
           <LogoText>
-            <LogoTitle>isTrue?</LogoTitle>
+            <LogoTitle>TruthBot</LogoTitle>
             {/*<span className="text-xs">Ethereum dev stack</span>*/}
           </LogoText>
         </LogoLink>
