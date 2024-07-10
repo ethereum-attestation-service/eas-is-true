@@ -1,5 +1,10 @@
 import OpenAI from "openai";
 
+type ModelResponseObject = {
+  validity: string;
+  critique: string;
+};
+
 export async function getResponseFromLLM(statement: string) {
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
@@ -25,9 +30,6 @@ export async function getResponseFromLLM(statement: string) {
 
   const result = completion.choices[0].message.content;
 
-  const modelResponseObject: {
-    validity: string;
-    critique: string;
-  } = JSON.parse(result!);
+  const modelResponseObject: ModelResponseObject = JSON.parse(result!);
   return { model, modelResponseObject };
 }

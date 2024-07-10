@@ -150,9 +150,7 @@ export const AttestationCard = ({ pkg, hideVote }: Props) => {
         throw new Error("No signer available.");
       }
 
-      const eas = new EAS(EASContractAddress);
-
-      eas.connect(signer);
+      const eas = new EAS(EASContractAddress, { signer });
 
       const offchain = await eas.getOffchain();
 
@@ -161,13 +159,13 @@ export const AttestationCard = ({ pkg, hideVote }: Props) => {
 
       const sig = await offchain.signOffchainAttestation(
         {
-          refUID: pkg.sig.uid,
-          data: encodedData,
-          expirationTime: 0n,
-          recipient: ethers.ZeroAddress,
-          revocable: true,
           schema: "0x30b32d5102c39d482689d1b8747d236dde4871a10cd8048e8fea721e956a7979",
+          data: encodedData,
+          recipient: ethers.ZeroAddress,
+          expirationTime: 0n,
+          revocable: true,
           time: BigInt(Math.floor(Date.now() / 1000)),
+          refUID: pkg.sig.uid,
         },
         signer,
       );

@@ -8,17 +8,17 @@ BigInt.prototype.toJSON = function () {
   return this.toString();
 };
 
-const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26
-const verifySchemaUid = "0x40e5abe23a3378a9a43b7e874c5cb8dfd4d6b0823501d317acee41e08d3af4dd";
-const provider = new ethers.AlchemyProvider("sepolia", process.env.NEXT_PUBLIC_ALCHEMY_API_KEY);
-const account = new ethers.Wallet(process.env.ETH_KEY as string, provider);
-const eas = new EAS(EASContractAddress, { signer: account });
-
 export async function POST(request: NextRequest) {
   try {
     const { statement } = await request.json();
 
     const { model, modelResponseObject } = await getResponseFromLLM(statement);
+
+    const EASContractAddress = "0xC2679fBD37d54388Ce493F1DB75320D236e1815e"; // Sepolia v0.26
+    const verifySchemaUid = "0x40e5abe23a3378a9a43b7e874c5cb8dfd4d6b0823501d317acee41e08d3af4dd";
+    const provider = new ethers.AlchemyProvider("sepolia", process.env.NEXT_PUBLIC_ALCHEMY_API_KEY);
+    const signer = new ethers.Wallet(process.env.ETH_KEY as string, provider);
+    const eas = new EAS(EASContractAddress, { signer: signer });
 
     const schemaEncoder = new SchemaEncoder(
       "string requestedTextToVerify,string model,string validity,string critique",
@@ -59,11 +59,11 @@ export async function POST(request: NextRequest) {
         refUID: ethers.ZeroHash,
         revocable: true,
       },
-      account,
+      signer,
     );
 
     const pkg: AttestationShareablePackageObject = {
-      signer: account.address,
+      signer: signer.address,
       sig: offchainAttestation,
     };
 
